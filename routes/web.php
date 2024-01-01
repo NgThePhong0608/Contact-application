@@ -25,24 +25,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', WelcomeController::class);
 
 Route::prefix('/admin')->name('admin.')->group(function () {
-    //group controller routes
-    /* Route::controller(ContactController::class)->name('contacts.')->group(function () {
-        Route::get('/contacts', 'index')->name('index'); // named route to call easily
-        Route::get('/contacts/create', 'create')->name('create');
-        Route::get('/contacts/{id}', 'show')->where('id', '[0->9]+')->name('show');
-    }); */
-    /*Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
-
+    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
     Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
     Route::get('/contacts/create', [ContactController::class, 'create'])->name('contacts.create');
-
     Route::get('/contacts/{id}', [ContactController::class, 'show'])->where('id', '[0->9]+')->name('contacts.show');
-
     Route::get('/contacts/{id}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
     Route::put('/contacts/{id}', [ContactController::class, 'update'])->name('contacts.update');
-
-    Route::delete('/contacts/{id}/delete', [ContactController::class, 'destroy'])->name('contacts.destroy');*/
-    Route::resource('/contacts',  ContactController::class);
+    Route::delete('/contacts/{id}/delete', [ContactController::class, 'destroy'])->name('contacts.destroy');
+    Route::delete('/contacts/{contact}/restore', [ContactController::class, 'restore'])->name('contacts.restore');
+    Route::delete('/contacts/{contact}/force-delete', [ContactController::class, 'forceDelete'])->name('contacts.force-delete');
 });
 
 Route::fallback(function () {

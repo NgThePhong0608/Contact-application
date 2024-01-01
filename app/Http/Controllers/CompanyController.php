@@ -16,7 +16,7 @@ class CompanyController extends Controller
     {
         $companies = Company::latest()->get();
         // dd($companies);
-        return view('companies.index', ['companies' => $companies]);
+        return view('companies.index', compact('companies'));
     }
 
     /**
