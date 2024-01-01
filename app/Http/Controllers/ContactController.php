@@ -20,22 +20,14 @@ class ContactController extends Controller
     public function index(Request $request)
     {
         $companies = $this->company->pluck();
-        /* if (!request()->query('company_id')) {
-            $contacts = Contact::latest()->paginate(10);
-        } else {
-            $contacts = Contact::latest()->where('company_id', request()->query('company_id'))->paginate(10);
-        } */
-//        DB::enableQueryLog();
         $contacts = Contact::latest()->where(function ($query) {
             $companyId = request()->query('company_id');
 
             if ($companyId) {
                 $query->where('company_id', $companyId);
             }
-
         })->where(function ($query) {
             $search_value = trim(request()->query('search'));
-//            dd($search_value);
             if ($search_value) {
                 $query->where('first_name', 'LIKE', "%{$search_value}%")
                     ->orWhere('last_name', 'LIKE', "%{$search_value}%")
@@ -44,19 +36,7 @@ class ContactController extends Controller
                     ->orWhere('phone', 'LIKE', "%{$search_value}%");
             }
         })->paginate(10);
-//        dump(DB::getQueryLog());
-
-        /* $contactsCollection = Contact::latest()->get();
-        $limit = 10;
-        $currentPage = request()->query('page', 1);
-        $items = $contactsCollection->slice(($currentPage * $limit - $limit), $limit);
-        $total = $contactsCollection->count();
-        $contacts = new LengthAwarePaginator($items, $total, $limit, $currentPage, [
-            'path' => $request->url(),
-            'query' => $request->query()
-        ]); */
-//        return view('contacts.index', ['contacts' => $contacts, 'companies' => $companies]);
-        return $contacts;
+        return view('contacts.index', ['contacts' => $contacts, 'companies' => $companies]);
     }
 
 
