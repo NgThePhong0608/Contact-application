@@ -15,18 +15,16 @@ class ContactController extends Controller
 
     public function __construct(protected CompanyRepository $company)
     {
-        // $this->company = $company;
     }
 
-    public function index(Request $request)
+    public function index()
     {
         $companies = $this->company->pluck();
-        $query = Contact::query();
-        if (request()->query('trash')) {
-            // $query->withoutGlobalScope(SimpleSoftDeleteScope::class)->whereNotNull('deleted_at');
-            $query->onlyTrashed();
-        }
-        $contacts = $query->sortByNameAlpha()->filterByCompany()->withFilter()->paginate(10);
+        $contacts = Contact::allowedTrashed()
+            ->allowedSorts('last_name')
+            ->allowedFilters('company_id')
+            ->allowedSearch('first_name', 'last_name', 'phone', 'email', 'address')
+            ->paginate(10);
         return view('contacts.index', ['contacts' => $contacts, 'companies' => $companies]);
     }
 
