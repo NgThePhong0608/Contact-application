@@ -23,24 +23,10 @@ class ContactController extends Controller
         $companies = $this->company->pluck();
         $query = Contact::query();
         if (request()->query('trash')) {
-            $query->withoutGlobalScope(SimpleSoftDeleteScope::class)->whereNotNull('deleted_at');
+            // $query->withoutGlobalScope(SimpleSoftDeleteScope::class)->whereNotNull('deleted_at');
+            $query->onlyTrashed();
         }
-        $contacts = $query->latest()->where(function ($query) {
-            $companyId = request()->query('company_id');
-
-            if ($companyId) {
-                $query->where('company_id', $companyId);
-            }
-        })->where(function ($query) {
-            $search_value = trim(request()->query('search'));
-            if ($search_value) {
-                $query->where('first_name', 'LIKE', "%{$search_value}%")
-                    ->orWhere('last_name', 'LIKE', "%{$search_value}%")
-                    ->orWhere('address', 'LIKE', "%{$search_value}%")
-                    ->orWhere('email', 'LIKE', "%{$search_value}%")
-                    ->orWhere('phone', 'LIKE', "%{$search_value}%");
-            }
-        })->paginate(10);
+        $contacts = $query->sortByNameAlpha()->filterByCompany()->withFilter()->paginate(10);
         return view('contacts.index', ['contacts' => $contacts, 'companies' => $companies]);
     }
 
