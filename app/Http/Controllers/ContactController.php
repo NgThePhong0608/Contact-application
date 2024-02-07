@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Contact;
+use App\Models\Scopes\SimpleSoftDeleteScope;
 use App\Repositories\CompanyRepository;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -22,7 +23,7 @@ class ContactController extends Controller
         $companies = $this->company->pluck();
         $query = Contact::query();
         if (request()->query('trash')) {
-            $query->onlyTrashed();
+            $query->withoutGlobalScope(SimpleSoftDeleteScope::class)->whereNotNull('deleted_at');
         }
         $contacts = $query->latest()->where(function ($query) {
             $companyId = request()->query('company_id');
