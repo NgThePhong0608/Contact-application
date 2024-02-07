@@ -21,7 +21,7 @@ class ContactController extends Controller
     {
         $companies = $this->company->pluck();
         $contacts = Contact::allowedTrashed()
-            ->allowedSorts('last_name')
+            ->allowedSorts(['first_name', 'last_name', 'email'], '-id')
             ->allowedFilters('company_id')
             ->allowedSearch('first_name', 'last_name', 'phone', 'email', 'address')
             ->paginate(10);
