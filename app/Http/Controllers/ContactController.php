@@ -29,9 +29,9 @@ class ContactController extends Controller
     }
 
 
-    public function show($id)
+    public function show(Contact $contact)
     {
-        $contact = Contact::findOrFail($id);
+        // route binding
         return view('contacts.show')->with('contact', $contact);
     }
 
@@ -56,15 +56,14 @@ class ContactController extends Controller
         return redirect()->route('admin.contacts.index')->with('message', 'Contact has been added successfully');
     }
 
-    public function edit($id)
+    public function edit(Contact $contact)
     {
-        $contact = Contact::findOrFail($id);
         $companies = $this->company->pluck();
         return view('contacts.edit', ['contact' => $contact, 'companies' => $companies]);
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Contact $contact)
     {
         $request->validate([
             'first_name' => 'required|max:30|string',
@@ -74,13 +73,12 @@ class ContactController extends Controller
             'address' => 'nullable',
             'company_id' => 'required|exists:companies,id',
         ]);
-        Contact::findOrFail($id)->update($request->all());
+        $contact->update($request->all());
         return redirect()->route('admin.contacts.index')->with('message', 'Contact has been updated successfully');
     }
 
-    public function destroy($id)
+    public function destroy(Contact $contact)
     {
-        $contact = Contact::findOrFail($id);
         $contact->delete();
         $redirect = request()->query('redirect');
         return ($redirect ? redirect()->route($redirect) : back())
@@ -88,9 +86,8 @@ class ContactController extends Controller
             ->with('undoRoute', $this->getUndoRoute('admin.contacts.restore', $contact));
     }
 
-    public function restore($id)
+    public function restore(Contact $contact)
     {
-        $contact = Contact::onlyTrashed()->findOrFail($id);
         $contact->restore();
         return back()
             ->with('message', 'Contact has restored from trash')
@@ -102,9 +99,8 @@ class ContactController extends Controller
         return request()->missing('undo') ? route($name, [$resource->id, 'undo' => true]) : null;
     }
 
-    public function forceDelete($id)
+    public function forceDelete(Contact $contact)
     {
-        $contact = Contact::onlyTrashed()->findOrFail($id);
         $contact->forceDelete();
         return back()
             ->with('message', 'Contact has been removed permanently');
