@@ -67,10 +67,10 @@
             <label for="company_id" class="col-md-3 col-form-label">Company</label>
             <div class="col-md-9">
                 <label>
-                    <select class="form-control @error('company_id') is-invalid @enderror"  name="company_id">
-                        <option value="">Select Company</option>
+                    <select class="form-control" name="company_id" id="company_id" @error('company_id') is-invalid @enderror >
+                        <option value=""> Select Company</option>
                             @foreach($companies as $id => $company)
-                                <option value="{{ $id }} @selected($id == request()->old('company_id', $contact->company_id))" > {{ $company  }} </option>
+                            <option value="{{ $id }}" @selected($id == old('company_id', $contact->company_id))>{{ $company }}</option>
                             @endforeach
                     </select>
                     @error('company_id')
