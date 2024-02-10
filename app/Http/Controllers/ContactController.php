@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactRequest;
+use App\Http\Requests\UpdateContactRequest;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Scopes\SimpleSoftDeleteScope;
@@ -42,24 +44,12 @@ class ContactController extends Controller
         return view('contacts.create', ['companies' => $companies, 'contact' => $contact]);
     }
 
-    public function store(Request $request)
+    public function store(ContactRequest $request)
     {
-        $request->validate($this->rules());
         Contact::create($request->all());
         return redirect()->route('admin.contacts.index')->with('message', 'Contact has been added successfully');
     }
 
-    protected function rules()
-    {
-        return [
-            'first_name' => 'required|max:30|string',
-            'last_name' => 'required|max:30|string',
-            'email' => 'required|max:30|email',
-            'phone' => 'nullable',
-            'address' => 'nullable',
-            'company_id' => 'required|exists:companies,id',
-        ];
-    }
 
     public function edit(Contact $contact)
     {
@@ -68,9 +58,8 @@ class ContactController extends Controller
     }
 
 
-    public function update(Request $request, Contact $contact)
+    public function update(UpdateContactRequest $request, Contact $contact)
     {
-        $request->validate($this->rules());
         $contact->update($request->all());
         return redirect()->route('admin.contacts.index')->with('message', 'Contact has been updated successfully');
     }
