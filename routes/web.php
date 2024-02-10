@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactNoteController;
 use App\Http\Controllers\TagController;
@@ -24,30 +25,34 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', WelcomeController::class);
 
-Route::prefix('/admin')->name('admin.')->group(function () {
-    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
-    Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
-    Route::get('/contacts/create', [ContactController::class, 'create'])->name('contacts.create');
-    Route::get('/contacts/{contact}', [ContactController::class, 'show'])->where('id', '[0->9]+')->name('contacts.show');
-    Route::get('/contacts/{contact}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
-    Route::put('/contacts/{contact}', [ContactController::class, 'update'])->name('contacts.update');
-    Route::delete('/contacts/{contact}/delete', [ContactController::class, 'destroy'])->name('contacts.destroy');
-    Route::delete('/contacts/{contact}/restore', [ContactController::class, 'restore'])
-        ->name('contacts.restore')
-        ->withTrashed();
-    Route::delete('/contacts/{contact}/force-delete', [ContactController::class, 'forceDelete'])
-        ->name('contacts.force-delete')
-        ->withTrashed();
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', DashboardController::class);
+    Route::prefix('/admin')->name('admin.')->group(function () {
+        Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+        Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
+        Route::get('/contacts/create', [ContactController::class, 'create'])->name('contacts.create');
+        Route::get('/contacts/{contact}', [ContactController::class, 'show'])->where('id', '[0->9]+')->name('contacts.show');
+        Route::get('/contacts/{contact}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
+        Route::put('/contacts/{contact}', [ContactController::class, 'update'])->name('contacts.update');
+        Route::delete('/contacts/{contact}/delete', [ContactController::class, 'destroy'])->name('contacts.destroy');
+        Route::delete('/contacts/{contact}/restore', [ContactController::class, 'restore'])
+            ->name('contacts.restore')
+            ->withTrashed();
+        Route::delete('/contacts/{contact}/force-delete', [ContactController::class, 'forceDelete'])
+            ->name('contacts.force-delete')
+            ->withTrashed();
+    });
+    //Route::resource('/companies', CompanyController::class);
+
+    Route::resources([
+        '/tags' => TagController::class,
+        '/tasks' => TaskController::class,
+    ]);
+    Route::resource('/contacts.notes', ContactNoteController::class);
 });
 
 Route::fallback(function () {
     return '<h1>Sorry, the page is not exist</h1>';
 });
 
-//Route::resource('/companies', CompanyController::class);
 
-Route::resources([
-    '/tags' => TagController::class,
-    '/tasks' => TaskController::class,
-]);
-Route::resource('/contacts.notes', ContactNoteController::class);
