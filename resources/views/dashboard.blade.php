@@ -7,7 +7,7 @@
         <div class="container">
             <h1 class="h5 mb-3">
                 Welcome
-                <small class="text-muted">Phong</small>
+                <strong class="text-muted">{{ auth()->user()->name }}</strong>
             </h1>
             <div class="row">
                 <div class="col-md-4">
