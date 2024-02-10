@@ -44,7 +44,7 @@ Route::fallback(function () {
     return '<h1>Sorry, the page is not exist</h1>';
 });
 
-Route::resource('/companies', CompanyController::class);
+//Route::resource('/companies', CompanyController::class);
 
 Route::resources([
     '/tags' => TagController::class,

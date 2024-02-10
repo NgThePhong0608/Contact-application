@@ -1,4 +1,4 @@
-@extends('layouts.landing')
+@extends('layouts.main')
 
 @section('content')
     <!-- content -->
@@ -80,4 +80,4 @@
             </div>
         </div>
     </section>
-@endsection 
+@endsection
