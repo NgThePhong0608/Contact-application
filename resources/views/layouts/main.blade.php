@@ -12,6 +12,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{{asset('assets/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('assets/css/custom.css')}}" rel="stylesheet">
+    @stack('styles')
 </head>
 <body>
 <!-- navbar -->
@@ -47,7 +48,7 @@
                             {{ Auth::user()->name }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="profile.html">Settings</a>
+                            <a class="dropdown-item" href="{{route('user-profile-information.edit')}}">Settings</a>
                             <form action="{{route('logout')}}" method="POST" style="display: inline;">
                                 @csrf
                                 <button class="dropdown-item">Logout</button>
@@ -64,5 +65,6 @@
 <script src="{{asset('assets/js/jquery.min.js')}}"></script>
 <script src="{{asset('assets/js/popper.min.js')}}"></script>
 <script src="{{asset('assets/js/bootstrap.min.js')}}"></script>
+@stack('scripts')
 </body>
 </html>
