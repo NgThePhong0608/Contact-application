@@ -11,7 +11,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Storage;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,5 +57,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::fallback(function () {
     return '<h1>Sorry, the page is not exist</h1>';
 });
-
-

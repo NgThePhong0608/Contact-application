@@ -4,6 +4,7 @@ namespace App\Actions\Fortify;
 
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
@@ -34,6 +35,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'profile_picture' => ['nullable', 'image'],
         ])->validate();
 
+        $this->uploadProfilePicture($input);
+
         if ($input['email'] !== $user->email && $user instanceof MustVerifyEmail) {
             $this->updateVerifiedUser($user, $input);
         } else {
@@ -44,7 +47,20 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'company' => $input['company'],
                 'country' => $input['country'],
                 'address' => $input['address'],
+                'profile_picture' => $input['profile_picture'],
             ])->save();
+        }
+    }
+
+    public function uploadProfilePicture(&$input){
+        if (request()->hasFile('profile_picture'))
+        {
+            $uploadFile = $input['profile_picture'];
+            $fileName = $uploadFile->storeAs(
+                'profile',
+                'profile-user-'. request()->user()->id . '.' . $uploadFile->getClientOriginalExtension()
+            );
+            $input['profile_picture'] = $fileName;
         }
     }
 
@@ -63,6 +79,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'country' => $input['country'],
             'address' => $input['address'],
             'email_verified_at' => null,
+            'profile_picture' => $input['profile_picture'],
         ])->save();
 
         $user->sendEmailVerificationNotification();
