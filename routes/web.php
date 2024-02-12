@@ -4,12 +4,12 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CompanyController;
-use \App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Settings\PasswordController;
+use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\ContactNoteController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WelcomeController;
-use App\Models\Company;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +29,7 @@ Route::get('/', WelcomeController::class);
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', DashboardController::class);
     Route::get('/settings/profile-information', ProfileController::class)->name('user-profile-information.edit');
+    Route::get('/settings/update-password', PasswordController::class)->name('user-update-password.edit');
     Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
         Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
