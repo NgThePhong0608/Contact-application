@@ -1,7 +1,7 @@
 <tr>
-    <td colspan="6">
+    <td colspan="8">
         <div class="alert alert-danger">
-            No contact found
+            No company found
         </div>
     </td>
 </tr>

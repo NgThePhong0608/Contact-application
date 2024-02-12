@@ -30,14 +30,17 @@
         <div class="collapse navbar-collapse" id="navbar-toggler">
             <ul class="navbar-nav">
                 @if(Auth::check())
-                    <li class="nav-item"><a href="#" class="nav-link">Companies</a></li>
-                    <li class="nav-item active"><a href="{{route('admin.contacts.index')}}"
-                                                   class="nav-link">Contacts</a></li>
+                    <li class="nav-item @if(request()->routeIs('admin.companies*')) active @endif">
+                        <a href="{{ route('admin.companies.index') }}" class="nav-link">Companies</a>
+                    </li>
+                    <li class="nav-item @if(request()->routeIs('admin.contacts*')) active @endif">
+                        <a href="{{ route('admin.contacts.index') }}" class="nav-link">Contacts</a>
+                    </li>
                 @endif
             </ul>
             <ul class="navbar-nav ml-auto">
                 @if(!Auth::check())
-                    <li class="nav-item mr-2"><a href="{{ route('login') }}" class="btn btn-outline-secondary">Login</a>
+                    <li class="nav-item"><a href="{{ route('login') }}" class="btn btn-outline-secondary">Login</a>
                     </li>
                     <li class="nav-item"><a href="{{ route('register') }}" class="btn btn-outline-primary">Register</a>
                     </li>

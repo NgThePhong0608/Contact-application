@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
- Route::apiResources([
-     '/contacts' => ContactController::class,
-     '/companies' => CompanyController::class,
- ]);
+// Route::apiResources([
+//     '/contacts' => ContactController::class,
+//     '/companies' => CompanyController::class,
+// ]);

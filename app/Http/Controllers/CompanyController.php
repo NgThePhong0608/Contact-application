@@ -14,8 +14,11 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::latest()->get();
-        // dd($companies);
+        $companies = Company::allowedTrashed()
+            ->allowedSorts(['name', 'website', 'email'], '-id')
+            ->allowedSearch('name', 'website', 'email')
+            ->forUser(auth()->user())
+            ->paginate(5);
         return view('companies.index', compact('companies'));
     }
 
