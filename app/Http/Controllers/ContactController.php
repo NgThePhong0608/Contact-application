@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateContactRequest;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Scopes\SimpleSoftDeleteScope;
+use App\Models\User;
 use App\Repositories\CompanyRepository;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -15,17 +16,19 @@ use Illuminate\Support\Facades\DB;
 class ContactController extends Controller
 {
 
-    public function __construct(protected CompanyRepository $company)
+    protected function userCompanies()
     {
+        return Company::forUser(auth()->user())->orderBy('name')->pluck('name', 'id');
     }
 
     public function index()
     {
-        $companies = $this->company->pluck();
+        $companies = $this->userCompanies();
         $contacts = Contact::allowedTrashed()
             ->allowedSorts(['first_name', 'last_name', 'email'], '-id')
             ->allowedFilters('company_id')
             ->allowedSearch('first_name', 'last_name', 'phone', 'email', 'address')
+            ->forUser(auth()->user())
             ->paginate(10);
         return view('contacts.index', ['contacts' => $contacts, 'companies' => $companies]);
     }
@@ -40,7 +43,7 @@ class ContactController extends Controller
     public function create()
     {
         $contact = new Contact();
-        $companies = $this->company->pluck();
+        $companies = $this->userCompanies();
         return view('contacts.create', ['companies' => $companies, 'contact' => $contact]);
     }
 
@@ -53,7 +56,7 @@ class ContactController extends Controller
 
     public function edit(Contact $contact)
     {
-        $companies = $this->company->pluck();
+        $companies = $this->userCompanies();
         return view('contacts.edit', ['contact' => $contact, 'companies' => $companies]);
     }
 
