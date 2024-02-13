@@ -5,7 +5,7 @@
     <td>{{ $contact->email }}</td>
     <td>{{ $contact->phone }}</td>
     <td>{{ $contact->address }}</td>
-    <td>{{ $contact->company->name }}</td>
+    <td>{{ $contact->company->name ?? null }}</td>
     <td width="150">
         @if ($showTrashButton)
             @include('shared.buttons.restore', [
