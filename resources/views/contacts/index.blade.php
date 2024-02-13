@@ -21,48 +21,50 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @include('contacts.filter', ['companies' => $companies])
+                            @include('shared.filter', [
+                                'filterDropdown' => 'contacts.company-selection'
+                            ])
                             @include('shared.flash')
                             <table class="table table-striped table-hover">
                                 <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">
-                                            {!! sortable("First Name") !!}
-                                        </th>
-                                        <th scope="col">
-                                            {!! sortable("Last Name") !!}
-                                        </th>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">
+                                        {!! sortable("First Name") !!}
+                                    </th>
+                                    <th scope="col">
+                                        {!! sortable("Last Name") !!}
+                                    </th>
 
-                                        <th scope="col">
-                                            {!! sortable("Email") !!}
-                                        </th>
-                                        <th scope="col">
-                                            Phone
-                                        </th>
-                                        <th scope="col">
-                                            Address
-                                        </th>
-                                        <th scope="col">
-                                            Company
-                                        </th>
-                                        <th scope="col">
-                                            Actions
-                                        </th>
-                                    </tr>
+                                    <th scope="col">
+                                        {!! sortable("Email") !!}
+                                    </th>
+                                    <th scope="col">
+                                        Phone
+                                    </th>
+                                    <th scope="col">
+                                        Address
+                                    </th>
+                                    <th scope="col">
+                                        Company
+                                    </th>
+                                    <th scope="col">
+                                        Actions
+                                    </th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $showTrashButton = request()->query('trash') ? true : false;
-                                    @endphp
-                                    @forelse($contacts as $index => $contact)
-                                        @include('contacts.contact', [
-                                            'contact' => $contact,
-                                            'index' => $index,
-                                        ])
-                                    @empty
-                                        @include('shared.empty', ['numCol' => 8])
-                                    @endforelse
+                                @php
+                                    $showTrashButton = request()->query('trash') ? true : false;
+                                @endphp
+                                @forelse($contacts as $index => $contact)
+                                    @include('contacts.contact', [
+                                        'contact' => $contact,
+                                        'index' => $index,
+                                    ])
+                                @empty
+                                    @include('shared.empty', ['numCol' => 8])
+                                @endforelse
                                 </tbody>
                             </table>
 

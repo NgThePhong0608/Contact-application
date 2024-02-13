@@ -1,5 +1,4 @@
-{{--<select class="custom-select" name="company_id" id="search-select" onchange="this.form.submit()">--}}
-<select class="custom-select" name="company_id" id="search-select">
+<select class="custom-select search-select" name="company_id">
 
     <option value="" selected>All Companies</option>
     @forelse ($companies as $id => $company)
