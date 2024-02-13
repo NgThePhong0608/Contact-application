@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -87,6 +88,24 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         $company->delete();
-        return redirect()->route('admin.companies.index')->with('message', 'Company has been deleted');
+        $redirect = request()->query('redirect');
+        return ($redirect ? redirect()->route($redirect) : back())
+            ->with('message', 'Company has been moved to trash')
+            ->with('undoRoute', getUndoRoute('admin.companies.restore', $company));
+    }
+
+    public function restore(Company $company)
+    {
+        $company->restore();
+        return back()
+            ->with('message', 'Company has restored from trash')
+            ->with('undoRoute', getUndoRoute('admin.contacts.destroy', $company));
+    }
+
+    public function forceDelete(Company $company)
+    {
+        $company->forceDelete();
+        return back()
+            ->with('message', 'Company has been removed permanently');
     }
 }

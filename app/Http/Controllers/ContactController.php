@@ -8,7 +8,6 @@ use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Scopes\SimpleSoftDeleteScope;
 use App\Models\User;
-use App\Repositories\CompanyRepository;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -73,7 +72,7 @@ class ContactController extends Controller
         $redirect = request()->query('redirect');
         return ($redirect ? redirect()->route($redirect) : back())
             ->with('message', 'Contact has been moved to trash')
-            ->with('undoRoute', $this->getUndoRoute('admin.contacts.restore', $contact));
+            ->with('undoRoute', getUndoRoute('admin.contacts.restore', $contact));
     }
 
     public function restore(Contact $contact)
@@ -81,13 +80,9 @@ class ContactController extends Controller
         $contact->restore();
         return back()
             ->with('message', 'Contact has restored from trash')
-            ->with('undoRoute', $this->getUndoRoute('admin.contacts.destroy', $contact));
+            ->with('undoRoute', getUndoRoute('admin.contacts.destroy', $contact));
     }
 
-    protected function getUndoRoute($name, $resource)
-    {
-        return request()->missing('undo') ? route($name, [$resource->id, 'undo' => true]) : null;
-    }
 
     public function forceDelete(Contact $contact)
     {
