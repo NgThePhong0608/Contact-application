@@ -16,58 +16,47 @@
                                 </h2>
                                 <div class="ml-auto">
                                     <a href="{{ route('admin.companies.create') }}" class="btn btn-success">
-                                        <i class="fa fa-plus-circle"> Add New </i>
-                                    </a>
+                                        <i class="fa fa-plus-circle"></i> Add New</a>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-{{--                            @include('companies.filter', ['companies' => $companies])--}}
-                            @if ($message = session('message'))
-                                <div class="alert alert-success"> {{ $message }}
-                                    @if ($undoRoute = session('undoRoute'))
-                                        <form action="{{ $undoRoute }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('delete')
-                                            <button class="btn alert-link">Undo</button>
-                                        </form>
-                                    @endif
-                                </div>
-                            @endif
+                            {{--                            @include('companies.filter', ['companies' => $companies])--}}
+                            @include('shared.flash')
                             <table class="table table-striped table-hover">
                                 <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">
-                                            {!! sortable("Name") !!}
-                                        </th>
-                                        <th scope="col">
-                                            {!! sortable("Website") !!}
-                                        </th>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">
+                                        {!! sortable("Name") !!}
+                                    </th>
+                                    <th scope="col">
+                                        {!! sortable("Website") !!}
+                                    </th>
 
-                                        <th scope="col">
-                                            {!! sortable("Email") !!}
-                                        </th>
-                                        <th scope="col">
-                                            Contacts
-                                        </th>
-                                        <th scope="col">
-                                            Actions
-                                        </th>
-                                    </tr>
+                                    <th scope="col">
+                                        {!! sortable("Email") !!}
+                                    </th>
+                                    <th scope="col">
+                                        Contacts
+                                    </th>
+                                    <th scope="col">
+                                        Actions
+                                    </th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $showTrashButton = request()->query('trash') ? true : false;
-                                    @endphp
-                                    @forelse($companies as $index => $company)
-                                        @include('companies.company', [
-                                            'company' => $company,
-                                            'index' => $index,
-                                        ])
-                                    @empty
-                                        @include('companies.empty')
-                                    @endforelse
+                                @php
+                                    $showTrashButton = request()->query('trash') ? true : false;
+                                @endphp
+                                @forelse($companies as $index => $company)
+                                    @include('companies.company', [
+                                        'company' => $company,
+                                        'index' => $index,
+                                    ])
+                                @empty
+                                    @include('shared.empty', ['numCol' => 8])
+                                @endforelse
                                 </tbody>
                             </table>
 

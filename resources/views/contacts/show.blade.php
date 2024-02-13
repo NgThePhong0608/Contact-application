@@ -52,7 +52,7 @@
                                             <a href=" {{ route('admin.contacts.edit', $contact->id) }}"
                                                class="btn btn-info">Edit</a>
                                             <form
-                                                action="{{ route('contacts.destroy', ['contact' => $contact->id, 'redirect' => 'contacts.index']) }}"
+                                                action="{{ route('admin.contacts.destroy', ['contact' => $contact->id, 'redirect' => 'admin.contacts.index']) }}"
                                                 method="POST" style="display: inline">
                                                 @csrf
                                                 @method('delete')
